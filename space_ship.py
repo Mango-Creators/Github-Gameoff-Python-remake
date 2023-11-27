@@ -1,4 +1,5 @@
 import pygame
+import math
 
 
 class SpaceShip(pygame.sprite.Sprite):
@@ -13,12 +14,9 @@ class SpaceShip(pygame.sprite.Sprite):
         self.clock = pygame.time.Clock()
         self.delta_time = self.clock.tick(60)/1000
         self.tag = tag
-    def move(self):
-
-        if self.keys_pressed[pygame.K_w]:
-            self.rect.centery -= self.velocity * self.delta_time
-        if self.keys_pressed[pygame.K_s]:
-            self.rect.centery += self.velocity * self.delta_time
+        
+        
+        self.mass = 0.0000000000000000000000000000001
 
     def scale(self):
         # Store the old center of the rectangle
@@ -43,7 +41,17 @@ class SpaceShip(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=old_center)
 
     def update(self):
+       
         self.delta_time = self.clock.tick(60) / 1000
+        self.garvity()
+        
         self.keys_pressed = pygame.key.get_pressed()
-        self.move()
+        # self.move()
+        
         self.scale()
+    
+    def garvity(self):
+        self.rect.centery += self.velocity * self.delta_time
+        self.velocity += 30
+    def flap(self):
+        self.velocity = -550
