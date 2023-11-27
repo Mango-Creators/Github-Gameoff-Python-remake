@@ -2,7 +2,7 @@ import pygame
 
 
 class SpaceShip(pygame.sprite.Sprite):
-    def __init__(self, image, center_coords, velocity):
+    def __init__(self, image, center_coords, velocity, tag:str):
         super().__init__()
         self.base_image = image
         self.image = self.base_image
@@ -12,6 +12,7 @@ class SpaceShip(pygame.sprite.Sprite):
         self.scaling_factor = 1.0
         self.clock = pygame.time.Clock()
         self.delta_time = self.clock.tick(60)/1000
+        self.tag = tag
     def move(self):
 
         if self.keys_pressed[pygame.K_w]:
@@ -25,11 +26,11 @@ class SpaceShip(pygame.sprite.Sprite):
 
         # Adjust the scaling factor based on a key press
         if self.keys_pressed[pygame.K_a]:
-            self.scaling_factor += 0.05  # Increase scaling factor when SPACE key is pressed
+            self.scaling_factor += 0.1  # Increase scaling factor when SPACE key is pressed
             if self.scaling_factor > 6.0:
                 self.scaling_factor = 6.0  # Limit the maximum scaling factor
         if self.keys_pressed[pygame.K_d]:
-            self.scaling_factor -= 0.05
+            self.scaling_factor -= 0.1
             if self.scaling_factor < 0.01:
                 self.scaling_factor = 0.01
 
