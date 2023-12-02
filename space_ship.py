@@ -3,7 +3,7 @@ from events import *
 
 
 class SpaceShip(pygame.sprite.Sprite):
-    def __init__(self, image, center_coords, velocity, tag:str):
+    def __init__(self, image, center_coords, velocity, tag: str):
         super().__init__()
         self.base_image = image
         self.image = self.base_image
@@ -12,10 +12,9 @@ class SpaceShip(pygame.sprite.Sprite):
         self.keys_pressed = pygame.key.get_pressed()
         self.scaling_factor = 1.0
         self.clock = pygame.time.Clock()
-        self.delta_time = self.clock.tick(60)/1000
+        self.delta_time = self.clock.tick(60) / 1000
         self.tag = tag
-        
-        
+
         self.mass = 0.0000000000000000000000000000001
 
     def scale(self):
@@ -24,7 +23,9 @@ class SpaceShip(pygame.sprite.Sprite):
 
         # Adjust the scaling factor based on a key press
         if self.keys_pressed[pygame.K_a]:
-            self.scaling_factor += 0.1  # Increase scaling factor when SPACE key is pressed
+            self.scaling_factor += (
+                0.1  # Increase scaling factor when SPACE key is pressed
+            )
             if self.scaling_factor > 6.0:
                 self.scaling_factor = 6.0  # Limit the maximum scaling factor
         if self.keys_pressed[pygame.K_d]:
@@ -41,22 +42,25 @@ class SpaceShip(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=old_center)
 
     def update(self):
-       
         self.delta_time = self.clock.tick(60) / 1000
         self.garvity()
-        
+
         self.keys_pressed = pygame.key.get_pressed()
         # self.move()
-        
+
         self.scale()
         self.check_status()
-    
+
     def garvity(self):
-        self.rect.centery += self.velocity * self.delta_time #type: ignore
+        self.rect.centery += self.velocity * self.delta_time  # type: ignore
         self.velocity += 30
+
     def flap(self):
         self.velocity = -550
-    
+
     def check_status(self):
-        if self.rect.topleft[1] > pygame.display.get_surface().get_height() or self.rect.bottomleft[1] < 0:
+        if (
+            self.rect.topleft[1] > pygame.display.get_surface().get_height()
+            or self.rect.bottomleft[1] < 0
+        ):
             pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
