@@ -1,6 +1,6 @@
 import pygame
 import random
-from events import GAME_OVER_EVENT
+from events import *
 
 from space_ship import SpaceShip
 
@@ -13,6 +13,7 @@ class PipePair(pygame.sprite.Sprite):
         self.delta_time = self.clock.tick(60) / 1000
         self.upper_pipe = pygame.rect.Rect(0, 0, 50, self.screen.get_height())
         self.lower_pipe = pygame.rect.Rect(0, 0, 50, self.screen.get_height())
+        self.player_passed = False
         self.gap = 0
         self.player = player
         self.height_range = []
@@ -70,10 +71,15 @@ class PipePair(pygame.sprite.Sprite):
     
     def check_for_collision(self):
         if self.collider.colliderect(self.player):
-            if not(self.height_range[0] <= self.player.rect.height <= self.height_range[1]):
+            if self.height_range[0] <= self.player.rect.height <= self.height_range[1] and (not self.player_passed):
+                pygame.event.post(pygame.event.Event(SCORE_INCREMENT_EVENT))
+                self.player_passed = True
+            elif not self.player_passed:
                 pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
-        if self.upper_pipe.colliderect(self.player) or self.lower_pipe.colliderect(self.player):
-            pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
+                self.player_passed = True
+        # if self.upper_pipe.colliderect(self.player) or self.lower_pipe.colliderect(self.player):
+        #     pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
+
     
     
 
@@ -85,3 +91,4 @@ class PipePair(pygame.sprite.Sprite):
 5. check if the space ship size is big or small enough
 6. send out a signal
 """
+

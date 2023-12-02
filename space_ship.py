@@ -1,5 +1,5 @@
 import pygame
-from events import GAME_OVER_EVENT
+from events import *
 
 
 class SpaceShip(pygame.sprite.Sprite):
