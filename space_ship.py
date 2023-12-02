@@ -64,3 +64,4 @@ class SpaceShip(pygame.sprite.Sprite):
             or self.rect.bottomleft[1] < 0
         ):
             pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
+            pass

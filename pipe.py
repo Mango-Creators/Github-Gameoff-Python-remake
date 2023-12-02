@@ -31,14 +31,14 @@ class PipePair(pygame.sprite.Sprite):
         self.upper_pipe.bottomleft = (x_pos, y_pos)
 
     def set_lower_rect(self):
-        x_pos = self.screen.get_width() + 10
+        x_pos = self.upper_pipe.bottomleft[0]
         y_pos = self.upper_pipe.bottomleft[1] + self.gap
 
         self.lower_pipe.topleft = (x_pos, y_pos)
 
     def set_gap(self):
-        self.gap = random.randint(
-            self.upper_pipe.bottomleft[1], self.screen.get_height() + 10
+        self.gap = random.randrange(
+            self.upper_pipe.bottom, self.screen.get_height() - 20
         )
 
     # Collider Stuff
@@ -70,7 +70,9 @@ class PipePair(pygame.sprite.Sprite):
         # self.set_invisible_collider()
         pygame.draw.rect(self.screen, (255, 255, 255), self.upper_pipe)
         pygame.draw.rect(self.screen, (255, 255, 255), self.lower_pipe)
-        pygame.draw.rect(self.screen, (255, 0, 0), self.collider)
+        if self.lower_pipe.topleft[1] > self.screen.get_height():
+            self.lower_pipe.topleft = (self.lower_pipe.topleft[0], 580)
+        # pygame.draw.rect(self.screen, (255, 0, 0), self.collider)
 
     def check_for_collision(self):
         if self.collider.colliderect(self.player):
