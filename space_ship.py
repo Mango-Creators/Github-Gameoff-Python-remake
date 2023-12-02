@@ -51,7 +51,7 @@ class SpaceShip(pygame.sprite.Sprite):
         self.scale()
     
     def garvity(self):
-        self.rect.centery += self.velocity * self.delta_time
+        self.rect.centery += self.velocity * self.delta_time #type: ignore
         self.velocity += 30
     def flap(self):
         self.velocity = -550

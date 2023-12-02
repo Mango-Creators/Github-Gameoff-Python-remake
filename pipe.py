@@ -7,6 +7,7 @@ from space_ship import SpaceShip
 class PipePair(pygame.sprite.Sprite):
     def __init__(self, screen: pygame.Surface):
         super().__init__()
+        self.collider = pygame.rect.Rect(0, 0, 0, 0)
         self.screen = screen
         self.clock = pygame.time.Clock()
         self.delta_time = self.clock.tick(60) / 1000
@@ -16,6 +17,7 @@ class PipePair(pygame.sprite.Sprite):
         self.set_upper_rect()
         self.set_gap()
         self.set_lower_rect()
+        self.set_collider()
 
 
     def set_upper_rect(self):
@@ -33,6 +35,17 @@ class PipePair(pygame.sprite.Sprite):
         self.gap = random.randint(self.upper_pipe.bottomleft[1], self.screen.get_height()-self.upper_pipe.bottomleft[1]-5)
     
     
+    def set_collider(self):
+        pos = self.upper_pipe.bottomright
+        height = self.gap
+        
+        self.collider.topright = pos
+        self.collider.width = 15
+        self.collider.height = height
+    
+    def update_collider(self):
+        self.collider.topright = self.upper_pipe.bottomright
+    
     
     def move(self):
         self.upper_pipe.x -= 100 * self.delta_time # type: ignore
@@ -40,10 +53,13 @@ class PipePair(pygame.sprite.Sprite):
         
     def update(self):
         self.delta_time = self.clock.tick(60) / 1000
+        
         self.move()
+        self.update_collider()
         # self.set_invisible_collider()
         pygame.draw.rect(self.screen, (255, 255, 255), self.upper_pipe)
         pygame.draw.rect(self.screen, (255, 255, 255), self.lower_pipe)
+        pygame.draw.rect(self.screen, (255, 0, 0), self.collider)
     
     
         

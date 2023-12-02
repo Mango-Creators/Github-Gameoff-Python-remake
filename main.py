@@ -25,7 +25,7 @@ is_running = True
 clock = pygame.time.Clock()
 
 # Spawning pipes
-spawn_timer = pygame.time.get_ticks()
+spawn_timer = pygame.time.get_ticks() 
 spawn_interval = 3000
 pipes_track = pygame.sprite.Group()
 
