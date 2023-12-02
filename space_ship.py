@@ -1,5 +1,5 @@
 import pygame
-import math
+from events import GAME_OVER_EVENT
 
 
 class SpaceShip(pygame.sprite.Sprite):
@@ -49,9 +49,14 @@ class SpaceShip(pygame.sprite.Sprite):
         # self.move()
         
         self.scale()
+        self.check_status()
     
     def garvity(self):
         self.rect.centery += self.velocity * self.delta_time #type: ignore
         self.velocity += 30
     def flap(self):
         self.velocity = -550
+    
+    def check_status(self):
+        if self.rect.topleft[1] > pygame.display.get_surface().get_height() or self.rect.bottomleft[1] < 0:
+            pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))

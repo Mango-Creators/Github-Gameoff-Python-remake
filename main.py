@@ -1,6 +1,7 @@
 import pygame
 import space_ship
 import pipe
+from events import GAME_OVER_EVENT
 
 pygame.init()
 
@@ -13,7 +14,7 @@ pygame.display.set_caption("Game")
 background = pygame.image.load("Space Background.png").convert()
 player = pygame.sprite.GroupSingle()
 player.add(space_ship.SpaceShip(pygame.transform.rotate(
-    pygame.transform.scale(pygame.image.load("Main Ship - Base - Damaged.png").convert_alpha(), (48 * 2, 48 * 2)), -90),
+    pygame.transform.scale(pygame.image.load("Main Ship - Base - Damaged.png").convert_alpha(), (34 * 2, 27 * 2)), -90),
                                 (200, 0), 600, "player"))
 
 # Gamestates
@@ -29,6 +30,13 @@ spawn_timer = pygame.time.get_ticks()
 spawn_interval = 3000
 pipes_track = pygame.sprite.Group()
 
+def reset():
+    player.empty()
+    player.add(space_ship.SpaceShip(pygame.transform.rotate(
+    pygame.transform.scale(pygame.image.load("Main Ship - Base - Damaged.png").convert_alpha(), (34 * 2, 27 * 2)), -90),
+                                (200, 0), 600, "player"))
+    pipes_track.empty()
+
 if __name__ == "__main__":
 
     while is_running:
@@ -39,15 +47,21 @@ if __name__ == "__main__":
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     player.sprites()[0].flap()
+                if event.key == pygame.K_h:
+                    reset()
+                    game_state = game_states[1]
+            if event.type == GAME_OVER_EVENT:
+                game_state = game_states[2]
                 
 
         if game_state == game_states[1]:
             # Spawn Enemies
             current_time = pygame.time.get_ticks()
             if current_time - spawn_timer > spawn_interval:
-                pipes_track.add(pipe.PipePair(screen))
+                pipes_track.add(pipe.PipePair(screen, player.sprites()[0]))
                 spawn_timer = current_time
-            screen.blit(background, (0, 0))  # Displaying background
+            screen.fill((0, 255, 0))
+            screen.blit(background, (0, 0))# Displaying background
 
             # GameObjects displayed here
             pipes_track.update()
