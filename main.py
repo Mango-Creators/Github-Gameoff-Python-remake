@@ -1,3 +1,4 @@
+import time
 import pygame
 import space_ship
 import pipe
@@ -30,9 +31,19 @@ player.add(
 score = 0
 
 main_font = pygame.font.Font("ARCADECLASSIC.ttf", 50)
+
+# Initial setting for the score text
 score_text = main_font.render(f"{score}", False, pygame.color.Color(255, 255, 255))
 score_text_rect = score_text.get_rect()
 score_text_rect.topleft = (10, 10)
+
+# Creating the gameover text
+game_over_text = main_font.render(
+    "Game Over!Press  H  to  restart", False, pygame.color.Color(0, 0, 0)
+)
+game_over_text_rect = game_over_text.get_rect(
+    center=(dimensions[0] // 2, dimensions[1] // 2)
+)
 
 # Gamestates
 game_states = ["menu", "play", "game_over"]
@@ -72,11 +83,14 @@ def reset():
     score = 0
 
 
+game_over = True
+
 if __name__ == "__main__":
     while is_running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 is_running = False
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     player.sprites()[0].flap()
@@ -84,13 +98,17 @@ if __name__ == "__main__":
                     pygame.event.post(pygame.event.Event(RESTART_EVENT))
                 if event.key == pygame.K_q:
                     pygame.event.post(pygame.event.Event(pygame.QUIT))
+
             if event.type == GAME_OVER_EVENT:
                 game_state = game_states[2]
+                game_over =  True
+
             if event.type == RESTART_EVENT:
                 reset()
+
             if event.type == SCORE_INCREMENT_EVENT:
                 score += 1
-                print("Score Incremented")
+                print(f"Score: {score}")
 
         if game_state == game_states[1]:
             score_text_rect.topleft = (30, 30)
@@ -104,8 +122,6 @@ if __name__ == "__main__":
                 spawn_timer = current_time
             screen.fill((0, 255, 0))
             screen.blit(background, (0, 0))  # Displaying background
-
-            pygame.draw.rect(screen, (0, 255, 0), player.sprites()[0].rect)
 
             # GameObjects displayed here
             pipes_track.update()
@@ -122,7 +138,15 @@ if __name__ == "__main__":
                     break
             screen.blit(score_text, score_text_rect)
 
-        pygame.display.update()  # Updating all displayww
+        if game_state == game_states[2]:
+            if game_over:
+                time.sleep(1)
+                game_over = False
+
+            screen.fill("#EFBC68")
+            screen.blit(game_over_text, game_over_text_rect)
+
+        pygame.display.update()  # Updating all displays
         pygame.display.flip()
         clock.tick(60)  # Setting max framerate
 

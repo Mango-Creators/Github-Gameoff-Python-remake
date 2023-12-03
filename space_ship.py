@@ -25,12 +25,12 @@ class SpaceShip(pygame.sprite.Sprite):
         # Adjust the scaling factor based on a key press
         if self.keys_pressed[pygame.K_a]:
             self.scaling_factor += (
-                0.1  # Increase scaling factor when SPACE key is pressed
+                0.05  # Increase scaling factor when SPACE key is pressed
             )
             if self.scaling_factor > 6.0:
                 self.scaling_factor = 6.0  # Limit the maximum scaling factor
         if self.keys_pressed[pygame.K_d]:
-            self.scaling_factor -= 0.1
+            self.scaling_factor -= 0.05
             if self.scaling_factor < 0.01:
                 self.scaling_factor = 0.01
 
