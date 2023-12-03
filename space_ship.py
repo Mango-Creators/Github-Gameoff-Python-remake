@@ -1,3 +1,4 @@
+from pickletools import pyunicode
 import pygame
 from events import *
 
@@ -44,21 +45,20 @@ class SpaceShip(pygame.sprite.Sprite):
 
     def update(self):
         self.delta_time = self.clock.tick(60) / 1000
-        self.gravity()
 
         self.keys_pressed = pygame.key.get_pressed()
-        # self.move()
+        self.move()
 
         self.scale()
         self.check_status()
 
-    def gravity(self):
-        self.rect.centery += self.velocity * self.delta_time  # type: ignore
-        self.velocity += 30
-
-    def flap(self):
-        self.velocity = -550
-
+    def move(self):
+        if self.keys_pressed[pygame.K_w] or self.keys_pressed[pygame.K_UP]:
+            self.rect.y -= self.velocity * self.delta_time
+        if self.keys_pressed[pygame.K_s] or self.keys_pressed[pygame.K_DOWN]:
+            self.rect.y += self.velocity * self.delta_time
+        
+        
     def check_status(self):
         if (
             self.rect.topleft[1] > pygame.display.get_surface().get_height()

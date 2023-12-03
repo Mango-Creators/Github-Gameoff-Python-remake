@@ -3,6 +3,7 @@ import pygame
 import space_ship
 import pipe
 from events import *
+import pygame.gfxdraw
 
 pygame.init()
 
@@ -92,8 +93,7 @@ if __name__ == "__main__":
                 is_running = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    player.sprites()[0].flap()
+
                 if event.key == pygame.K_h:
                     pygame.event.post(pygame.event.Event(RESTART_EVENT))
                 if event.key == pygame.K_q:
@@ -122,7 +122,10 @@ if __name__ == "__main__":
                 spawn_timer = current_time
             screen.fill((0, 255, 0))
             screen.blit(background, (0, 0))  # Displaying background
-
+            
+            # Displaying the shield
+            pygame.gfxdraw.box(screen, player.sprites()[0].rect, (0, 0, 255, 100)) # draw a transparent box
+            
             # GameObjects displayed here
             pipes_track.update()
             player.draw(screen)
