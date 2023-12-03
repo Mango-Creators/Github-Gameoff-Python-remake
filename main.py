@@ -51,7 +51,7 @@ pipes_track = pygame.sprite.Group()
 def reset():
     global game_state
     global score
-    
+
     player.empty()
     player.add(
         space_ship.SpaceShip(
@@ -104,6 +104,8 @@ if __name__ == "__main__":
                 spawn_timer = current_time
             screen.fill((0, 255, 0))
             screen.blit(background, (0, 0))  # Displaying background
+
+            pygame.draw.rect(screen, (0, 255, 0), player.sprites()[0].rect)
 
             # GameObjects displayed here
             pipes_track.update()

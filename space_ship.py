@@ -3,11 +3,12 @@ from events import *
 
 
 class SpaceShip(pygame.sprite.Sprite):
-    def __init__(self, image, center_coords, velocity, tag: str):
+    def __init__(self, image: pygame.Surface, center_coords, velocity, tag: str):
         super().__init__()
         self.base_image = image
         self.image = self.base_image
-        self.rect = self.image.get_rect(center=center_coords)
+        self.rect = self.image.get_bounding_rect()
+        self.rect.center = center_coords
         self.velocity = velocity
         self.keys_pressed = pygame.key.get_pressed()
         self.scaling_factor = 1.0
@@ -43,7 +44,7 @@ class SpaceShip(pygame.sprite.Sprite):
 
     def update(self):
         self.delta_time = self.clock.tick(60) / 1000
-        self.garvity()
+        self.gravity()
 
         self.keys_pressed = pygame.key.get_pressed()
         # self.move()
@@ -51,7 +52,7 @@ class SpaceShip(pygame.sprite.Sprite):
         self.scale()
         self.check_status()
 
-    def garvity(self):
+    def gravity(self):
         self.rect.centery += self.velocity * self.delta_time  # type: ignore
         self.velocity += 30
 

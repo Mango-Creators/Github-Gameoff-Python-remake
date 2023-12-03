@@ -20,14 +20,20 @@ class PipePair(pygame.sprite.Sprite):
         self.height_range = []
         self.set_upper_rect()
         self.set_gap()
+        
+        # Just making sure gap is not too big
+        if self.gap + self.upper_pipe.bottomleft[1] > self.screen.get_height():
+            self.gap = 530 - self.upper_pipe.bottomleft[1]
+        
         self.set_lower_rect()
         self.set_collider()
         self.set_height_range()
+        
 
     # Initial Pipe Settings
     def set_upper_rect(self):
         x_pos = self.screen.get_width() + 10
-        y_pos = random.randint(0, self.screen.get_height() // 2)
+        y_pos = random.randint(10, self.screen.get_height() // 2)
         self.upper_pipe.bottomleft = (x_pos, y_pos)
 
     def set_lower_rect(self):
@@ -54,7 +60,7 @@ class PipePair(pygame.sprite.Sprite):
         self.collider.topright = self.upper_pipe.bottomright
 
     def set_height_range(self):
-        self.height_range = [(3 / 5) * self.gap, self.gap]
+        self.height_range = [(1/2) * self.gap, self.gap]
 
     # Active gameplay
     def move(self):
@@ -75,7 +81,7 @@ class PipePair(pygame.sprite.Sprite):
         # pygame.draw.rect(self.screen, (255, 0, 0), self.collider)
 
     def check_for_collision(self):
-        if self.collider.colliderect(self.player):
+        if self.collider.colliderect(self.player.rect):
             if self.height_range[0] <= self.player.rect.height <= self.height_range[
                 1
             ] and (not self.player_passed):
@@ -84,8 +90,9 @@ class PipePair(pygame.sprite.Sprite):
             elif not self.player_passed:
                 pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
                 self.player_passed = True
-        # if self.upper_pipe.colliderect(self.player) or self.lower_pipe.colliderect(self.player):
-        #     pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
+                
+        if self.upper_pipe.colliderect(self.player.rect) or self.lower_pipe.colliderect(self.player.rect):
+            pygame.event.post(pygame.event.Event(GAME_OVER_EVENT))
 
 
 """
